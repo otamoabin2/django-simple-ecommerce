@@ -1,4 +1,4 @@
-@import url(http://fonts.googleapis.com/css?family=Ubuntu);
+@import url(http://fonts.googleapis.com/css?family=Pacifico);
 
 body { 
     margin:0;
@@ -7,12 +7,20 @@ body {
 }
 
 h1, h2, h3, h4, h5 , h6 { 
-    font-family: 'Ubuntu', sans-serif; font-weight:normal;
+   
+    font-family: 'Pacifico', cursive;
 }
 
 a {
     text-decoration:none;
     color:#5993bb;
+}
+
+img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
 }
 
 a:hover {

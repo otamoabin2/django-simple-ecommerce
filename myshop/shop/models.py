@@ -1,8 +1,17 @@
 
-# Create your models here.
 from django.db import models
 from django.urls import reverse
+from django.contrib.auth.models import User
 
+
+
+# Create your models here.
+
+class Customer(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.user.username
 
 class Category(models.Model):
     name = models.CharField(max_length=200, db_index=True)
@@ -42,3 +51,12 @@ class Product(models.Model):
 
     def get_absolute_url(self):
         return reverse("shop:product_detail", args=[self.id, self.slug])
+
+class ProductQuantity(models.Model):
+    quantity = models.PositiveIntegerField()
+    product = models.ForeignKey(Product)
+    
+class Cart(models.Model): 
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    products = models.ManyToManyField(Product, through=ProductQuantity)
+    is_order = models.BooleanField(default=False)

@@ -1,4 +1,4 @@
-{% extends "shop/base.html" %}
+{% extends "base.html" %}
 {% load static %}
 
 {% block title %}
@@ -22,14 +22,20 @@
   <div id="main" class="product-list">
     <h1>{% if category %}{{ category.name }}{% else %}Products{% endif %}</h1>
     {% for product in products %}
+    {% for photo in photo_display %}
+    {%for tags in photo_description %}
       <div class="item">
         <a href="{{ product.get_absolute_url }}">
-          <img src="{% if product.image %}{{ product.image.url }}{% else %}{% static "img/no_image.png" %}{% endif %}">
-        </a>
-        <a href="{{ product.get_absolute_url }}">{{ product.name }}</a>
+          <img src="{{ photo }}">
+        </a> 
+        <a href="{{ product.get_absolute_url }}">{{ product.id }}</a>
+        <p> {{ tags }}</p>
         <br>
         ${{ product.price }}
       </div>
+
+        {% endfor %}
+      {% endfor %}
     {% endfor %}
   </div>
 {% endblock %}
