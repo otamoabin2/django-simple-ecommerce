@@ -54,9 +54,14 @@ class Product(models.Model):
 
 class ProductQuantity(models.Model):
     quantity = models.PositiveIntegerField()
-    product = models.ForeignKey(Product)
+    product = models.ForeignKey('shop.Product', on_delete=models.CASCADE)
+    cart = models.ForeignKey('shop.Cart', on_delete=models.CASCADE)
     
 class Cart(models.Model): 
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
-    products = models.ManyToManyField(Product, through=ProductQuantity)
+    customer = models.ForeignKey('shop.Customer', on_delete=models.CASCADE)
+    products = models.ManyToManyField('shop.Product', through=ProductQuantity)
     is_order = models.BooleanField(default=False)
+    
+    @property
+    def is_cart(self):
+        return not self.is_order

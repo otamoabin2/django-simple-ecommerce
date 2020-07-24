@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
 import requests
-from cart.forms import CartAddProductForm
+# from cart.forms import CartAddProductForm
 
 from .forms import *
 from .models import *
@@ -10,11 +10,22 @@ from .models import *
 pix_url = "https://pixabay.com/api/?key=17560993-1dca8c47b9291ed16f15f4a9b&q=impressions&image_type=paintings"
 
 
-def get_cart(customer):
-    # check if there is an active cart
+def get_cart(user):
+    # lookup the customer
+    customer = Customer.objects.get(user=user)
+    
+    # check if there is an active cart for the customer
+    active_carts = Cart.objects.filter(is_order=False, customer=customer)
+    if active_carts.exists():
+        return active_carts.first()
+    
     # else: create an active cart
+    cart = Cart.objects.create(customer=customer)       
+    
     # return the active dart
-    pass
+    return cart
+
+    
 
 def product_list(request, category_slug=None):
     category = None
@@ -38,7 +49,7 @@ def product_list(request, category_slug=None):
         products = products.filter(category=category)
     photo_display = photo_display[:len(products)]
     photo_description = photo_description[:len(products)]
-    print(13)
+
     
     context = {
         "category": category,
