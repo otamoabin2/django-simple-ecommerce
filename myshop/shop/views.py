@@ -8,24 +8,7 @@ from .forms import *
 from .models import *
 
 pix_url = "https://pixabay.com/api/?key=17560993-1dca8c47b9291ed16f15f4a9b&q=impressions&image_type=paintings"
-
-
-def get_cart(user):
-    # lookup the customer
-    customer = Customer.objects.get(user=user)
-    
-    # check if there is an active cart for the customer
-    active_carts = Cart.objects.filter(is_order=False, customer=customer)
-    if active_carts.exists():
-        return active_carts.first()
-    
-    # else: create an active cart
-    cart = Cart.objects.create(customer=customer)       
-    
-    # return the active dart
-    return cart
-
-    
+  
 
 def product_list(request, category_slug=None):
     category = None
@@ -93,3 +76,7 @@ class CreateAccount(CreateView):
         user = authenticate(username=username, password=password)
         login(self.request, user)
         return view
+    
+    
+    
+    

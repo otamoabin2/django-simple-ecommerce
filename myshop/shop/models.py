@@ -52,16 +52,31 @@ class Product(models.Model):
     def get_absolute_url(self):
         return reverse("shop:product_detail", args=[self.id, self.slug])
 
-class ProductQuantity(models.Model):
-    quantity = models.PositiveIntegerField()
-    product = models.ForeignKey('shop.Product', on_delete=models.CASCADE)
-    cart = models.ForeignKey('shop.Cart', on_delete=models.CASCADE)
-    
-class Cart(models.Model): 
-    customer = models.ForeignKey('shop.Customer', on_delete=models.CASCADE)
-    products = models.ManyToManyField('shop.Product', through=ProductQuantity)
-    is_order = models.BooleanField(default=False)
-    
-    @property
-    def is_cart(self):
-        return not self.is_order
+    class Cart(models.Model):
+        cart_id  = models.CharField(max_length=250, blank= True)
+        date_added =models.DateField(auto_now_add = True)
+        
+        
+        class Meta:
+            db_table = 'Cart'
+            ordering = ['date_added']
+            
+        def __str__(self):
+            return self.cart_id
+        
+        
+    class CartItem(models.Model):
+        product = models.ForeignKey(Product, on_delete=models.CASCADE)
+        cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
+        quantity = models.IntegerField()
+        active = models.BooleanField(default=True)
+        
+        
+        class Meta:
+            db_table = 'CartItem'
+            
+        def sub_total(self):
+            return self.product.price * self.quantity
+        
+        def __str__(self):
+            return self.product
